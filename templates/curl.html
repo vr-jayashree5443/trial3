@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Live Stream with Pose Estimation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div>
+        <img id="video_feed" src="" width="50%" />
+        <br>
+        <button onclick="startCamera()">Start Camera</button>
+        <button onclick="stopCamera()">Stop Camera</button>
+        <button onclick="finishStream()">Finish</button>
+    </div>
+
+    <script>
+        function startCamera() {
+            fetch('/start')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to start camera.');
+                    }
+                    document.getElementById('video_feed').src = '{{ url_for('video') }}';
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function stopCamera() {
+            fetch('/stop')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to stop camera.');
+                    }
+                    document.getElementById('video_feed').src = '';
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        function finishStream() {
+            fetch('/finish')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to finish stream.');
+                    }
+                })
+                .then(data => console.log(data))  // Log response from the server
+                .catch(error => console.error('Error:', error));}
+    </script>
+</body>
+</html>
